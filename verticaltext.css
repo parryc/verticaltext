@@ -1,0 +1,21 @@
+.line {
+	float: left;
+	padding: 2px;
+}
+.elem + .non-rotated {
+	padding-bottom: 1em;
+}
+
+.non-rotated {
+	margin-right: -1em;
+	-webkit-transform: rotate(-90deg);
+}
+.poem {
+	border: solid 2px grey;
+}
+
+.vertical {
+	float: left;
+	margin: 4px;
+	padding: 4px;
+}
