@@ -30,3 +30,7 @@ If you change the class name, make sure to reconfigure ```verticalizer```.
 Implement all of [the CSS3 specs](http://dev.w3.org/csswg/css3-writing-modes/)! Or... try to, at least. haha. 
 
 Right now, only Classical Chinese (lzh) works. 
+
+## License
+
+[MIT](http://parryc.mit-license.org/)
