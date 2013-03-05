@@ -1,4 +1,7 @@
-# Vertical Text
+# Face palm
+Looks like browsers have implemented writing-mode.  I was looking at old information.  Oh well, it was a fun little hack.
+
+## Vertical Text
 
 Vertical text, for the rare person who wants to display vertical text on just a normal webpage.
 
