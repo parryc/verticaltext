@@ -47,18 +47,29 @@
 			},
 			setVertical: function(){
 				var processed = this._preprocess(),
+					limit = this.options.lineLength,
 					build = "",
 					tempLine = [],
 					tempChild = "",
 					rowSplit;
-
 				processed.forEach(function(el,ind,array){
 					build += "<div class='line'>";
 					for (var i = 0; i < el.length; i++) {
 						if(el[i].isSub)
 							build += "<div class='other'>"+el[i].text+"</div>";
-						else
-							build += el[i].text.replace(/(.)/g,"<div class='elem'>$1</div>");
+						else {
+							rowSplit = el[i].text.split("");
+							if(rowSplit.length > limit) {
+								for (var j = 0; j < rowSplit.length; j += limit) {
+									tempLine.push(rowSplit.slice(j,j+limit));
+								}
+								for (var k = tempLine.length - 1; k >= 0; k--) {
+									build += tempLine[k].join("").replace(/(.)/g,"<div class='elem'>$1</div>");
+									build += "</div><div class='line'>";
+								}
+							} else
+								build += el[i].text.replace(/(.)/g,"<div class='elem'>$1</div>");
+						}
 					}
 					build += "</div>";
 				});
