@@ -8,7 +8,6 @@
 		rawHtml = selected.innerHTML.trim(),
 		children = selected.childNodes;
 
-
 	String.prototype.reverse=function(){return this.split("").reverse().join("");};
 
 	function verticalizer(){
@@ -28,7 +27,9 @@
 					section = [],
 					text = [],
 					isSub, stub;
+					console.log(children);
 				for (var i = 0; i < children.length; i++) {
+
 					if(children[i].localName === "br") {
 						text.push(section);
 						section = [];
@@ -36,9 +37,11 @@
 						stub = children[i].textContent.trim();
 						if(stub !== null && !children[i].hasChildNodes())
 							section.push({text: stub, isSub: false });
-						else
-							section.push({text: stub, isSub: true});
-						console.log(i + " " + stub);
+						else {
+							console.log(children[i]);
+							section.push({text: stub, isSub: true, width: children[i].width});
+							console.log(window.getComputedStyle(children[i],null).getPropertyValue("width"));
+						}
 					}
 				}
 				if(section)
@@ -51,13 +54,14 @@
 					build = "",
 					tempLine = [],
 					tempChild = "",
-					rowSplit;
+					rowSplit, otherEls;
+
 				processed.forEach(function(el,ind,array){
 					build += "<div class='line'>";
 					for (var i = 0; i < el.length; i++) {
-						if(el[i].isSub)
-							build += "<div class='other'>"+el[i].text+"</div>";
-						else {
+						if(el[i].isSub) {
+							build += "<div class='other' lang='en'>"+el[i].text+"</div>";
+						} else {
 							rowSplit = el[i].text.split("");
 							if(rowSplit.length > limit) {
 								for (var j = 0; j < rowSplit.length; j += limit) {
@@ -73,34 +77,30 @@
 					}
 					build += "</div>";
 				});
-				console.log(build);
-				/*for (var i = children.length - 1; i >= 0; i--) {
-					tempChild = children[i].textContent.trim();
 
-					if(children[i].localName !== "br")
-						if(tempChild !== null && !children[i].hasChildNodes()){
-							rowSplit = tempChild.split("");
-							if(rowSplit.length > this.options.lineLength) {
-								for (var j = 0; j < rowSplit.length; j += this.options.lineLength) {
-									tempLine.push(rowSplit.slice(j,j+this.options.lineLength));
-								}
-								for (var k = tempLine.length - 1; k >= 0; k--) {
-									build += "<div class='line'>" + tempLine[k].join("").replace(/(.)/g,"<div class='elem'>$1</div>")+"</div>";
-								}
-							} else {
-								build += "<div class='line'>" + tempChild.replace(/(.)/g,"<div class='elem'>$1</div>")+"<div class='other'>parry</div></div>";
-							}
-						} else {
-							build += "<div class='other'>"+tempChild+"</div>";
-						}
-				}*/
 				build = build.replace(/「/g,"﹁");
 				build = build.replace(/」/g,"﹂");
 				document.querySelectorAll(options.selector)[0].innerHTML = build;
-
+				otherEls = document.querySelectorAll('.other');
+				for (var i = otherEls.length - 1; i >= 0; i--) {
+					//console.log(otherEls[i].offsetWidth);
+					otherEls[i].style.margin = getEm(otherEls[i]);
+				}
 			}
 		};
 	}
+
+	var getEm = function(elem) {
+		var parentFontSize = parseInt(window.getComputedStyle(elem.parentNode, null).fontSize, 10),
+			elemFontSize = parseInt(window.getComputedStyle(elem, "").getPropertyValue("width"), 10),
+			emsRaw = Math.floor(Math.floor((elemFontSize / parentFontSize) * 100) / 100 ),
+			ems = Math.floor(emsRaw/2.0);
+		if(elemFontSize < 20)
+			return (ems+0.5)+"em -"+(ems+0.5)+"em -"+(1-elem.textContent.length*0.2)+"em -"+(ems+0.5)+"em";
+		else
+			return (ems+0.5)+"em -"+(ems+0.5)+"em "+(ems+0.5)+"em -"+(ems+0.5)+"em";
+
+	};
 
 	root.verticalizer = verticalizer();
 	root.verticalizer.setVertical();
