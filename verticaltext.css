@@ -10,8 +10,14 @@
 	margin-right: -1em;
 	-webkit-transform: rotate(-90deg);
 }
+
+.other {
+	margin: 1em -1em 0 -.7em;
+	-webkit-transform: rotate(90deg);
+}
+
 .poem {
-	border: solid 2px grey;
+	border: solid 2px gray;
 }
 
 .vertical {
